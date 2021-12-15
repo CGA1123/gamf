@@ -97,7 +97,7 @@ type startRequest struct {
 	Token      string   `json:"token"`
 }
 
-func StartHandler(store Store) http.HandlerFunc {
+func StartHandler(baseURL string, store Store) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var request startRequest
 		if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
@@ -128,7 +128,6 @@ func StartHandler(store Store) http.HandlerFunc {
 		}
 
 		request.Token = stateToken
-		baseURL := "http://localhost:1123"
 		request.Manifest.RedirectURL = fmt.Sprintf("%v/callback", baseURL)
 
 		payload, err := json.Marshal(request)
