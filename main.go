@@ -9,6 +9,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -89,10 +90,23 @@ func timeoutHandler(t time.Duration) func(http.Handler) http.Handler {
 func obs(n http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		span := trace.SpanFromContext(r.Context())
-		span.SetAttributes(attribute.String("type", "http_server"))
+		span.SetAttributes(
+			attribute.String("type", "http_server"),
+			headerAttr("X-Request-ID", r),
+			headerAttr("Via", r),
+			headerAttr("X-Forwarded-For", r),
+			headerAttr("X-Forwarded-Port", r),
+			headerAttr("X-Forwarded-Proto", r),
+		)
 
 		n.ServeHTTP(w, r)
 	})
+}
+
+func headerAttr(header string, r *http.Request) attribute.KeyValue {
+	normalisedHeader := strings.ReplaceAll(strings.ToLower(header), "-", "_")
+
+	return attribute.Key("http.request.header." + normalisedHeader).String(r.Header.Get(header))
 }
 
 func RunServer(port string, r *mux.Router) error {
