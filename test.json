@@ -1,13 +1,12 @@
 {
   "host": "github.com",
-  "target_type": "org",
-  "target_slug": "bissyio",
+  "target_type": "user",
+  "target_slug": "CGA1123",
   "manifest": {
-    "name": "ARC Sample Application",
-    "url": "https://github.com/actions-runner-controller/actions-runner-controller",
-    "hook_attributes": { "url": "https://760d-82-14-133-233.ngrok.io", "active": true },
-    "redirect_url": "https://4e3a-82-14-133-233.ngrok.io/callback",
-    "callback_urls": [ "https://760d-82-14-133-233.ngrok.io" ],
+    "name": "A Sample Application",
+    "url": "https://example.com",
+    "hook_attributes": { "url": "https://example.com", "active": true },
+    "callback_urls": [ "https://example.com" ],
     "public": false,
     "default_permissions": { "organization_self_hosted_runners": "write", "actions": "read", "checks": "read" },
     "default_events": [ "check_run", "workflow_job" ]
