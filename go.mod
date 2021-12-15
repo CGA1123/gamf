@@ -1,3 +1,6 @@
+// +heroku goVersion go1.17
+// +heroku install .
+
 module github.com/CGA1123/gamf
 
 go 1.17
