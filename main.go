@@ -43,6 +43,7 @@ func realMain() error {
 
 	env, err := requireEnv(
 		"PORT",
+		"GAMF_URL",
 		"GAMF_HOST",
 		"GAMF_ENV",
 		"REDIS_URL",
@@ -66,7 +67,7 @@ func realMain() error {
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler).Methods(http.MethodGet)
-	r.HandleFunc("/start", StartHandler(env["GAMF_HOST"], store)).Methods(http.MethodPost)
+	r.HandleFunc("/start", StartHandler(env["GAMF_URL"], store)).Methods(http.MethodPost)
 	r.HandleFunc("/redirect/{initialKey}", RedirectHandler(store)).Methods(http.MethodGet)
 	r.HandleFunc("/callback", CallbackHandler(store)).Methods(http.MethodGet)
 	r.HandleFunc("/code/{key}", CodeHandler(store)).Methods(http.MethodPost)
@@ -251,7 +252,8 @@ func requireEnv(names ...string) (map[string]string, error) {
 
 func defaultEnv() error {
 	defaults := map[string]string{
-		"GAMF_HOST": "http://localhost:1123",
+		"GAMF_HOST": "localhost:1123",
+		"GAMF_URL":  "http://localhost:1123",
 		"GAMF_ENV":  "development",
 		"PORT":      "1123",
 		"REDIS_URL": "redis://localhost:6379",
