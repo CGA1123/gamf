@@ -56,6 +56,12 @@ func realMain() error {
 		return fmt.Errorf("error configuring redis: %w", err)
 	}
 
+	closer, err := initObs(context.Background(), "gamf-http", env)
+	if err != nil {
+		return fmt.Errorf("error: %w", err)
+	}
+	defer closer()
+
 	store := NewRedisStore(redisClient)
 
 	r := mux.NewRouter()
