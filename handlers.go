@@ -74,7 +74,7 @@ func DoneHandler(w http.ResponseWriter, r *http.Request) {
 
 type manifestHookAttributes struct {
 	URL    string `json:"url"`
-	Active bool   `json:"bool"`
+	Active bool   `json:"active"`
 }
 
 type manifest struct {
