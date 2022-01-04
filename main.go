@@ -52,18 +52,29 @@ func realMain() error {
 		return fmt.Errorf("error fetching environment: %w", err)
 	}
 
-	redisClient, err := setupRedis(env["REDIS_URL"])
-	if err != nil {
-		return fmt.Errorf("error configuring redis: %w", err)
-	}
+	var store Store
 
-	closer, err := initObs(context.Background(), "gamf-http", env)
-	if err != nil {
-		return fmt.Errorf("error: %w", err)
-	}
-	defer closer()
+	// Setting GAMF_EPHEMERAL means that this is a very short-lived server
+	// for single/short use.
+	//
+	// We use an in memory store and don't set up any observability in this
+	// scenario.
+	if os.Getenv("GAMF_EPHEMERAL") != "" {
+		store = NewMemStore()
+	} else {
+		closer, err := initObs(context.Background(), "gamf-http", env)
+		if err != nil {
+			return fmt.Errorf("error: %w", err)
+		}
+		defer closer()
 
-	store := NewRedisStore(redisClient)
+		redisClient, err := setupRedis(env["REDIS_URL"])
+		if err != nil {
+			return fmt.Errorf("error configuring redis: %w", err)
+		}
+
+		store = NewRedisStore(redisClient)
+	}
 
 	r := mux.NewRouter()
 	r.HandleFunc("/", HomeHandler).Methods(http.MethodGet)
