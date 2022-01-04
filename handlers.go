@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -201,7 +202,7 @@ func RedirectHandler(store Store) http.HandlerFunc {
 
 		raw, err := store.GetDel(r.Context(), "i:"+key)
 		if err != nil {
-			if err == redis.Nil {
+			if errors.Is(err, redis.Nil) {
 				w.WriteHeader(http.StatusNotFound)
 				w.Header().Add("Content-Type", "text/plain")
 				w.Write([]byte("Error: failed to find metadata for the given key"))
