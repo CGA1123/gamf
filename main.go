@@ -45,7 +45,6 @@ func realMain() error {
 	env, err := requireEnv(
 		"PORT",
 		"GAMF_URL",
-		"GAMF_HOST",
 		"GAMF_ENV",
 		"REDIS_URL",
 	)
@@ -266,7 +265,6 @@ func requireEnv(names ...string) (map[string]string, error) {
 
 func defaultEnv() error {
 	defaults := map[string]string{
-		"GAMF_HOST": "localhost:1123",
 		"GAMF_URL":  "http://localhost:1123",
 		"GAMF_ENV":  "development",
 		"PORT":      "1123",
