@@ -250,7 +250,7 @@ func actionURL(data startRequest) string {
 	}
 }
 
-func CallbackHandler(store Store) http.HandlerFunc {
+func CallbackHandler(store Store, baseURL string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		state, code := r.FormValue("state"), r.FormValue("code")
 
@@ -270,7 +270,7 @@ func CallbackHandler(store Store) http.HandlerFunc {
 			return
 		}
 
-		http.Redirect(w, r, "/done", http.StatusFound)
+		http.Redirect(w, r, fmt.Sprintf("%s/done", baseURL), http.StatusFound)
 	}
 }
 

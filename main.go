@@ -80,7 +80,7 @@ func realMain() error {
 	r.HandleFunc("/", HomeHandler).Methods(http.MethodGet)
 	r.HandleFunc("/start", StartHandler(env["GAMF_URL"], store)).Methods(http.MethodPost)
 	r.HandleFunc("/redirect/{initialKey}", RedirectHandler(store)).Methods(http.MethodGet)
-	r.HandleFunc("/callback", CallbackHandler(store)).Methods(http.MethodGet)
+	r.HandleFunc("/callback", CallbackHandler(store, env["GAMF_URL"])).Methods(http.MethodGet)
 	r.HandleFunc("/code/{key}", CodeHandler(store)).Methods(http.MethodPost)
 	r.HandleFunc("/done", DoneHandler).Methods(http.MethodGet)
 
